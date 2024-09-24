@@ -1,0 +1,44 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam classAttributeIconSize 0
+skinparam usecase {
+  BackgroundColor PaleGreen
+  BorderColor DarkSlateGray
+  ArrowColor DarkSlateGray
+  ActorBorderColor black
+}
+
+package "Controlador de Usuarios" {
+
+  class UserController {
+    + getAllUsers(): ResponseEntity<List<User>>
+    + createUser(user: User): ResponseEntity<User>
+    + getUserById(id: Long): ResponseEntity<User>
+    + updateUser(id: Long, userDetails: User): ResponseEntity<User>
+    + deleteUser(id: Long): ResponseEntity<Void>
+  }
+
+  class UserService {
+    + getAllUsers(): List<User>
+    + createUser(user: User): User
+    + getUserById(id: Long): Optional<User>
+    + updateUser(id: Long, userDetails: User): User
+    + deleteUser(id: Long): void
+  }
+
+  class User {
+  }
+
+  class ResponseEntity<T> {
+  }
+
+  class Optional<User> {
+  }
+}
+
+UserController -> UserService : "Usa servicios de usuario"
+UserController -> ResponseEntity : "Retorna la respuesta HTTP"
+UserController -> User : "Define el modelo de usuario"
+UserService -> User : "Opera sobre los datos de usuario"
+UserService -> Optional : "Retorna el dato opcional"
+@enduml

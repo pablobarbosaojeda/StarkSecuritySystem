@@ -1,0 +1,25 @@
+@startuml
+
+    interface JpaRepository {
+        +save(Object entity)
+        +findAll() : List
+        +findById(ID id) : Optional
+        +delete(Object entity)
+    }
+
+    class UserRepository {
+        +findByUsername(String username) : User
+    }
+
+    JpaRepository <|-- UserRepository : extends
+    UserRepository --> User : manages
+
+    class User {
+        +id : Long
+        +username : String
+        +password : String
+        +role : String
+    }
+
+
+@enduml

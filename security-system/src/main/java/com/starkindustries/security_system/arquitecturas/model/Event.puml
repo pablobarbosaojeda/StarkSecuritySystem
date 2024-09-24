@@ -1,0 +1,21 @@
+@startuml {
+
+    class Event {
+        - Long id
+        - String eventType
+        - LocalDateTime timestamp
+
+        + Long getId()
+        + void setId(Long id)
+        + Sensor getSensor()
+        + void setSensor(Sensor sensor)
+        + String getEventType()
+        + void setEventType(String eventType)
+        + LocalDateTime getTimestamp()
+        + void setTimestamp(LocalDateTime timestamp)
+    }
+
+    Event --> Sensor : Many-to-One
+}
+
+@enduml

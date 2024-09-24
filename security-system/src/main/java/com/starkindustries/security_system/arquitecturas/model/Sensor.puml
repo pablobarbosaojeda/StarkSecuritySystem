@@ -1,0 +1,26 @@
+@startuml {
+
+    class Sensor {
+        - Long id
+        - String name
+        - String type
+        - String status
+        - String location
+
+        + Sensor()
+        + Sensor(String name, String type, String status, String location)
+        + Long getId()
+        + void setId(Long id)
+        + String getName()
+        + void setName(String name)
+        + String getType()
+        + void setType(String type)
+        + String getStatus()
+        + void setStatus(String status)
+        + String getLocation()
+        + void setLocation(String location)
+        + boolean isStatus()
+    }
+}
+
+@enduml

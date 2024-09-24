@@ -1,0 +1,44 @@
+@startuml
+
+
+SensorService --> Sensor
+SensorRepository --> Sensor : manages
+
+    class SensorService {
+        +getAllSensors() : List<Sensor>
+        +createSensor(Sensor sensor) : Sensor
+        +getSensorById(Long id) : Optional<Sensor>
+        +updateSensor(Long id, Sensor sensorDetails) : Sensor
+        +deleteSensor(Long id)
+    }
+
+    SensorService --> SensorRepository : uses
+
+
+
+    interface SensorRepository {
+        +findAll() : List<Sensor>
+        +findById(Long id) : Optional<Sensor>
+        +save(Sensor sensor) : Sensor
+        +deleteById(Long id)
+    }
+
+
+
+    class Sensor {
+        +id : Long
+        +name : String
+        +type : String
+        +status : boolean
+        +location : String
+        +getName() : String
+        +setName(String name)
+        +getType() : String
+        +setType(String type)
+        +getStatus() : boolean
+        +setStatus(boolean status)
+        +getLocation() : String
+        +setLocation(String location)
+    }
+
+@enduml

@@ -1,0 +1,44 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam classAttributeIconSize 0
+skinparam usecase {
+  BackgroundColor PaleGreen
+  BorderColor DarkSlateGray
+  ArrowColor DarkSlateGray
+  ActorBorderColor black
+}
+
+package "Controlador de Sensores" {
+
+  class SensorController {
+    + getAllSensors(): List<Sensor>
+    + createSensor(sensor: Sensor): Sensor
+    + getSensorById(id: Long): ResponseEntity<Sensor>
+    + updateSensor(id: Long, sensorDetails: Sensor): Sensor
+    + deleteSensor(id: Long): ResponseEntity<Void>
+  }
+
+  class SensorService {
+    + getAllSensors(): List<Sensor>
+    + createSensor(sensor: Sensor): Sensor
+    + getSensorById(id: Long): Optional<Sensor>
+    + updateSensor(id: Long, sensorDetails: Sensor): Sensor
+    + deleteSensor(id: Long): void
+  }
+
+  class Sensor {
+  }
+
+  class ResponseEntity<T> {
+  }
+
+  class Optional<Sensor> {
+  }
+}
+
+SensorController -> SensorService : "Utiliza los servicios del sensor"
+SensorController -> ResponseEntity : "Retorna la respuesta HTTP"
+SensorController -> Sensor : "Define el modelo de datos"
+SensorService -> Sensor : "Opera sobre los datos del sensor"
+SensorService -> Optional : "Retorna el dato opcional"
+@enduml

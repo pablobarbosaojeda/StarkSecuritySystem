@@ -1,0 +1,29 @@
+@startuml
+
+    class WebSocketConfig {
+        +configureMessageBroker(MessageBrokerRegistry config)
+        +registerStompEndpoints(StompEndpointRegistry registry)
+    }
+
+    interface WebSocketMessageBrokerConfigurer {
+        +configureMessageBroker(MessageBrokerRegistry config)
+        +registerStompEndpoints(StompEndpointRegistry registry)
+    }
+
+    class MessageBrokerRegistry {
+        +enableSimpleBroker(String destinationPrefix)
+        +setApplicationDestinationPrefixes(String prefix)
+    }
+
+    class StompEndpointRegistry {
+        +addEndpoint(String path)
+        +withSockJS() : StompEndpointRegistry
+    }
+
+    WebSocketConfig -down-|> WebSocketMessageBrokerConfigurer : implements
+    WebSocketConfig --> MessageBrokerRegistry : configures
+    WebSocketConfig --> StompEndpointRegistry : registers
+    StompEndpointRegistry --> SockJS : uses
+
+
+@enduml
