@@ -1,14 +1,14 @@
 package com.starkindustries.security_system.service;
 
 
-import com.starkindustries.security_system.model.Event;
+
 import com.starkindustries.security_system.model.Sensor;
 import com.starkindustries.security_system.repository.SensorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SensorService {
@@ -16,17 +16,28 @@ public class SensorService {
     @Autowired
     private SensorRepository sensorRepository;
 
-    public List<Sensor> getActiveSensors() {
-        return sensorRepository.findByActiveTrue(); // Retorna sensores activos
+    public List<Sensor> getAllSensors() {
+        return sensorRepository.findAll();
     }
 
-    @Async
-    public void processSensorData(Sensor sensor) {
-        // Lógica de procesamiento de datos
-        // Generar un evento si es necesario
-        Event event = new Event();
-        event.setSensor(sensor);
-        event.setEventType("Movement Detected");
-        // Guardar el evento (se puede llamar a un repositorio aquí)
+    public Sensor createSensor(Sensor sensor) {
+        return sensorRepository.save(sensor);
+    }
+
+    public Optional<Sensor> getSensorById(Long id) {
+        return sensorRepository.findById(id);
+    }
+
+    public Sensor updateSensor(Long id, Sensor sensorDetails) {
+        Sensor sensor = sensorRepository.findById(id).orElseThrow();
+        sensor.setName(sensorDetails.getName());
+        sensor.setType(sensorDetails.getType());
+        sensor.setStatus(sensorDetails.getStatus());
+        sensor.setLocation(sensorDetails.getLocation()); // Actualizar ubicación
+        return sensorRepository.save(sensor);
+    }
+
+    public void deleteSensor(Long id) {
+        sensorRepository.deleteById(id);
     }
 }
