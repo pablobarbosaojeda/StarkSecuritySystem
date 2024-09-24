@@ -1,0 +1,51 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam classAttributeIconSize 0
+skinparam usecase {
+  BackgroundColor LightBlue
+  BorderColor DarkSlateGray
+  ArrowColor DarkSlateGray
+  ActorBorderColor black
+}
+
+package "Servicio de Usuarios" {
+
+  class UserService {
+    + createUser(user: User): User
+    + getUserById(id: Long): Optional<User>
+    + updateUser(id: Long, userDetails: User): User
+    + deleteUser(id: Long): void
+    + getRoles(id: Long): Set<String>
+    + getAllUsers(): List<User>
+  }
+
+  class UserRepository {
+    + save(user: User): User
+    + findById(id: Long): Optional<User>
+    + deleteById(id: Long): void
+    + findAll(): List<User>
+  }
+
+  class User {
+    + getUsername(): String
+    + getPassword(): String
+    + getRoles(): Set<String>
+    + setUsername(username: String): void
+    + setPassword(password: String): void
+    + setRoles(roles: Set<String>): void
+  }
+
+  class Optional<User> {
+  }
+
+  class RuntimeException {
+  }
+
+  UserService -> UserRepository : "Usa métodos de repositorio"
+  UserService -> User : "Opera sobre el modelo de usuario"
+  UserRepository -> Optional : "Retorna un objeto opcional"
+  User -> Set : "Roles de usuario"
+  UserService -> RuntimeException : "Lanza excepción si no encuentra usuario"
+}
+
+@enduml
