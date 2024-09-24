@@ -1,0 +1,51 @@
+@startuml
+    class SecurityConfig {
+        +SecurityFilterChain securityFilterChain(HttpSecurity http) : SecurityFilterChain
+        +UserDetailsService userDetailsService() : UserDetailsService
+        +PasswordEncoder passwordEncoder() : PasswordEncoder
+    }
+
+    class HttpSecurity {
+        -csrf()
+        -authorizeHttpRequests()
+        -httpBasic()
+        +build() : SecurityFilterChain
+    }
+
+    class UserDetailsService {
+        +loadUserByUsername(String username) : UserDetails
+    }
+
+    class InMemoryUserDetailsManager {
+        +InMemoryUserDetailsManager(UserDetails... users)
+    }
+
+    class User {
+        +withUsername(String username) : UserBuilder
+    }
+
+    class UserBuilder {
+        +password(String password) : UserBuilder
+        +roles(String... roles) : UserBuilder
+        +build() : UserDetails
+    }
+
+    class PasswordEncoder {
+        +encode(CharSequence rawPassword) : String
+    }
+
+    class BCryptPasswordEncoder
+
+    SecurityConfig --> HttpSecurity : configures
+    SecurityConfig --> UserDetailsService : returns
+    SecurityConfig --> PasswordEncoder : returns
+    UserDetailsService --> InMemoryUserDetailsManager : creates
+    InMemoryUserDetailsManager --> UserDetails
+    User --> UserBuilder : creates
+    UserBuilder --> UserDetails : builds
+    PasswordEncoder <|-- BCryptPasswordEncoder : implements
+
+    HttpSecurity --> SecurityFilterChain : builds
+
+
+@enduml
