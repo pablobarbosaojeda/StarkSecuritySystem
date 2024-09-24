@@ -1,0 +1,15 @@
+@startuml {
+
+    class NotificationService {
+        + SimpMessagingTemplate messagingTemplate
+        + void sendSensorAlert(String message)
+    }
+
+    class SimpMessagingTemplate {
+        + void convertAndSend(String destination, Object payload)
+    }
+
+    NotificationService --> SimpMessagingTemplate : <<Autowired>>
+}
+
+@enduml
