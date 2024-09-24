@@ -1,6 +1,5 @@
 package com.starkindustries.security_system.config;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,8 +18,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
+                .csrf(csrf -> csrf.disable()) // Desactiva CSRF
                 .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/", "/error", "/login").permitAll() // Permitir acceso a la raíz, error y login
                         .requestMatchers("/api/sensors/**").hasRole("ADMIN") // Protege el endpoint
                         .anyRequest().authenticated() // El resto de endpoints requieren autenticación
                 )
@@ -33,7 +33,7 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails adminUser = User.withUsername("admin")
-                .password(passwordEncoder().encode("adminpassword"))
+                .password(passwordEncoder().encode("adminpassword")) // Asegúrate de que la contraseña sea correcta
                 .roles("ADMIN")
                 .build();
 
