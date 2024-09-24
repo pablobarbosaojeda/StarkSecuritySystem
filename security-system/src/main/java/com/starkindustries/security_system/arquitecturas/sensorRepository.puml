@@ -1,0 +1,24 @@
+@startuml
+
+    interface JpaRepository {
+        +save(Object entity)
+        +findAll() : List
+        +findById(ID id) : Optional
+        +delete(Object entity)
+    }
+
+    class SensorRepository {
+        +findByActiveTrue() : List<Sensor>
+    }
+
+    JpaRepository <|-- SensorRepository : extends
+    SensorRepository --> Sensor : manages
+
+    class Sensor {
+        +id : Long
+        +name : String
+        +active : boolean
+        +type : String
+    }
+
+@enduml
