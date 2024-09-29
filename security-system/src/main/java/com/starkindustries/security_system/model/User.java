@@ -1,63 +1,56 @@
 package com.starkindustries.security_system.model;
 
 import jakarta.persistence.*;
-
-
-import java.util.HashSet;
-import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Table(name = "users")
 public class User {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String username;
+    @GeneratedValue(
+            strategy = GenerationType.IDENTITY
+    )
+    private long id;
+
+    @Setter @Getter
+    private String name;
+
+    @Setter @Getter
+    private String email;
+
+    @Setter @Getter
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER) // Para cargar los roles
-    private Set<String> roles = new HashSet<>(); // Usar un Set para evitar duplicados
+    @Getter @Setter
+    @Enumerated(EnumType.STRING)
+    Roles role;
 
-    // Constructor
     public User() {
     }
 
-    public User(String username, String password, Set<String> roles) {
-        this.username = username;
-        this.password = password;
-        this.roles = roles;
-    }
-
-    // Getters y Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    public User(long id, String email, String name, String password, Roles role) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
+        this.email = email;
+        this.name = name;
         this.password = password;
+        this.role = role;
     }
 
-    public Set<String> getRoles() {
-        return roles; // Método para obtener roles
+    public User(String email, String name, String password, Roles role) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.role = role;
     }
 
-    public void setRoles(Set<String> roles) {
-        this.roles = roles; // Método para establecer roles
+    @Override
+    public String toString() {
+        return "User [" +
+                "Name: " + name + '\'' + "; Role:"
+                + role + '\'' + "; Email:" + email +
+                '\'' + "; Password:" + password
+                + '\'' + " ID: " + id +
+                ']';
     }
 }
