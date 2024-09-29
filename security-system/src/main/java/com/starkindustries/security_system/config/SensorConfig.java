@@ -18,14 +18,14 @@ public class SensorConfig {
     CommandLineRunner sensorRunner(SensorRepository sensorRepository, ReaderRepository readerRepository) {
         return args -> {
             // Creamos los sensores
-            TempSensor sensor1on = new TempSensor( "sensor1", "Vestibulo", true);
-            TempSensor sensor2off = new TempSensor( "sensor2", "Entrada", false);
-            MotionSensor sensor3on = new MotionSensor( "sensor3", "Despacho", true);
-            AccessSensor sensor4on = new AccessSensor( "sensor4", "Entrada", true);
+            TempSensor sensor1on = new TempSensor("sensor1", "Vestibulo", true);
+            TempSensor sensor2off = new TempSensor("sensor2", "Entrada", false);
+            MotionSensor sensor3on = new MotionSensor("sensor3", "Despacho", true);
+            AccessSensor sensor4on = new AccessSensor("sensor4", "Entrada", true);
 
             // Guardamos los sensores en la base de datos
-            SensorRepository.deleteAll();
-            SensorRepository.saveAll(List.of(sensor1on, sensor2off, sensor3on, sensor4on));
+            sensorRepository.deleteAll(); // Usamos la instancia inyectada
+            sensorRepository.saveAll(List.of(sensor1on, sensor2off, sensor3on, sensor4on)); // Usamos la instancia inyectada
 
             // Creamos las lecturas para sensor1on
             Reader lectura1 = new Reader("25.5", sensor1on, LocalDateTime.of(2024, 8, 27, 14, 0));
@@ -56,15 +56,15 @@ public class SensorConfig {
             Reader lectura20 = new Reader("Acceso permitido", sensor4on, LocalDateTime.of(2024, 8, 27, 16, 25));
 
             // Guardamos todas las lecturas en la base de datos
-            ReaderRepository.deleteAll();
-            Reader.saveAll(List.of(
+            readerRepository.deleteAll(); // Usamos la instancia inyectada
+            readerRepository.saveAll(List.of(
                     lectura1, lectura2, lectura3, lectura4, lectura5,
                     lectura6, lectura7, lectura8,
                     lectura9, lectura10, lectura11,
                     lectura12, lectura13, lectura14,
                     lectura15, lectura16, lectura17,
                     lectura18, lectura19, lectura20
-            ));
+            )); // Usamos la instancia inyectada
         };
     }
 }

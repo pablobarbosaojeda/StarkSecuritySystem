@@ -9,7 +9,7 @@ import com.starkindustries.security_system.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 
 @RestController
-@RequestMapping("publico/api/v1/health")
+@RequestMapping("public/api/v1/health")
 public class ProgramHealthCheckController {
 
     private final UserRepository userRepository;

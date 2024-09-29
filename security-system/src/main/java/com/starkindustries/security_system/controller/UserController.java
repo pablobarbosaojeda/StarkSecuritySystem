@@ -20,41 +20,40 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(UserService servicioUsuario, PasswordEncoder passwordEncoder) {
-        this.userService = servicioUsuario;
+    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
+        this.userService = userService;
         this.passwordEncoder = passwordEncoder;
     }
 
     // Obtener todos los usuarios
     @GetMapping
     public List<User> getUsers() {
-        return UserService.getUsers();
+        return userService.getUsers(); // Usamos la instancia inyectada
     }
 
     // Obtener un usuario por ID
     @GetMapping("/{id}")
     public Optional<User> getUserById(@PathVariable("id") Long id) {
-        return UserService.getUserById(id);
+        return userService.getUserById(id); // Usamos la instancia inyectada
     }
 
     // Agregar un nuevo usuario
     @PostMapping
     public void addUser(@RequestBody User user) {
-        UserService.addNewUser(new User(user.getName(), user.getEmail(), passwordEncoder.encode(user.getPassword()), user.getRole()));
+        userService.addNewUser(new User(user.getName(), user.getEmail(), passwordEncoder.encode(user.getPassword()), user.getRole()));
     }
 
     // Eliminar un usuario por ID
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable("id") Long id) {
-        UserService.deleteUser(id);
+        userService.deleteUser(id); // Usamos la instancia inyectada
     }
 
     // Actualizar un usuario por ID
     @PutMapping("/{id}")
     public void updateUser(
             @PathVariable("id") Long id,
-            @RequestBody User UpdatedUser) {
-        UserService.updateUser(id, UpdatedUser);
+            @RequestBody User updatedUser) {
+        userService.updateUser(id, updatedUser); // Usamos la instancia inyectada
     }
 }
-

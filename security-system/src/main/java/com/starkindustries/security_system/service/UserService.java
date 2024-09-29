@@ -29,10 +29,19 @@ public class UserService implements UserDetailsService {
         return userRepository.findUserByEmail(email);
     }
 
+    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException("No se encontró el usuario con el email: " + email));
-        return new User(user.getEmail(), user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority("ROLE_"+user.getRole().name())));
+        // Aquí usamos tu clase de repositorio para buscar al usuario
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("No se encontró el usuario con el email: " + email));
+
+        // Retornar un objeto UserDetails utilizando el constructor de la clase User de Spring Security
+        return org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
+                .password(user.getPassword())
+                .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name())))
+                .build();
     }
+
 
     // Obtener todos los usuarios
     public List<User> getUsers() {

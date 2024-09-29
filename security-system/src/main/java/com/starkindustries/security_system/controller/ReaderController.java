@@ -22,24 +22,24 @@ public class ReaderController {
     // Obtener todas las lecturas
     @GetMapping
     public List<Reader> getReader() {
-        return readerService.getReader();
+        return readerService.getReader(); // Usamos la instancia inyectada
     }
 
     // Obtener lecturas por sensor
     @GetMapping("/sensor/{sensorId}")
     public List<Reader> getReaderBySensor(@PathVariable("sensorId") Long sensorId) {
-        return readerService.getReaderBySensor(sensorId);
+        return readerService.getReaderBySensor(sensorId); // Usamos la instancia inyectada
     }
 
     // Agregar nueva lectura
     @PostMapping
     public void addReader(@RequestBody Reader reader) {
-        ReaderService.addReader(reader);
+        readerService.addReader(reader); // Usamos la instancia inyectada
     }
 
     // Eliminar lectura por ID
     @DeleteMapping("/{readerId}")
     public void deleteReader(@PathVariable("readerId") Long readerId) {
-        ReaderService.deleteReader(readerId);
+        readerService.deleteReader(readerId); // Usamos la instancia inyectada
     }
 }

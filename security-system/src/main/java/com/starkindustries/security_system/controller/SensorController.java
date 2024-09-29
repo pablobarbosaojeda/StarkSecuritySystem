@@ -26,36 +26,36 @@ public class SensorController {
     // Obtener todos los sensores
     @GetMapping
     public List<Sensor> getSensors() {
-        return SensorService.getSensors();
+        return sensorService.getSensors(); // Usamos la instancia inyectada
     }
 
     // Obtener sensores de temperatura
     @GetMapping("/temperature")
     public List<TempSensor> getTempSensors() {
-        return SensorService.getTempSensors();
+        return sensorService.getTempSensors(); // Usamos la instancia inyectada
     }
 
     // Obtener sensores de movimiento
     @GetMapping("/motion")
     public List<MotionSensor> getMotionSensors() {
-        return SensorService.getMotionSensors();
+        return sensorService.getMotionSensors(); // Usamos la instancia inyectada
     }
 
     // Obtener sensores de acceso
     @GetMapping("/access")
     public List<AccessSensor> getAccessSensors() {
-        return SensorService.getAccessSensors();
+        return sensorService.getAccessSensors(); // Usamos la instancia inyectada
     }
 
     // Agregar un nuevo sensor
     @PostMapping
     public void addSensor(@RequestBody Sensor sensor) {
-        SensorService.addNewSensor(sensor);
+        sensorService.addNewSensor(sensor); // Usamos la instancia inyectada
     }
 
     // Eliminar un sensor por ID
     @DeleteMapping("/{id}")
     public void deleteSensor(@PathVariable("id") Long id) {
-        SensorService.deleteSensor(id);
+        sensorService.deleteSensor(id); // Usamos la instancia inyectada
     }
 }
