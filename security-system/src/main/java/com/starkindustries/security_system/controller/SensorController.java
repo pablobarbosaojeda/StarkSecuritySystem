@@ -1,46 +1,61 @@
 package com.starkindustries.security_system.controller;
 
 
+import com.starkindustries.security_system.model.AccessSensor;
+import com.starkindustries.security_system.model.MotionSensor;
 import com.starkindustries.security_system.model.Sensor;
+import com.starkindustries.security_system.model.TempSensor;
 import com.starkindustries.security_system.service.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/sensors")
+@RequestMapping("publico/api/v1/sensors")
+@CrossOrigin(origins = "http://localhost:8080")
 public class SensorController {
 
+    private final SensorService sensorService;
+
     @Autowired
-    private SensorService sensorService;
+    public SensorController(SensorService sensorService) {
+        this.sensorService = sensorService;
+    }
 
+    // Obtener todos los sensores
     @GetMapping
-    public List<Sensor> getAllSensors() {
-        return sensorService.getAllSensors();
+    public List<Sensor> getSensors() {
+        return sensorService.getSensors(); // Usamos la instancia inyectada
     }
 
+    // Obtener sensores de temperatura
+    @GetMapping("/temperature")
+    public List<TempSensor> getTempSensors() {
+        return sensorService.getTempSensors(); // Usamos la instancia inyectada
+    }
+
+    // Obtener sensores de movimiento
+    @GetMapping("/motion")
+    public List<MotionSensor> getMotionSensors() {
+        return sensorService.getMotionSensors(); // Usamos la instancia inyectada
+    }
+
+    // Obtener sensores de acceso
+    @GetMapping("/access")
+    public List<AccessSensor> getAccessSensors() {
+        return sensorService.getAccessSensors(); // Usamos la instancia inyectada
+    }
+
+    // Agregar un nuevo sensor
     @PostMapping
-    public Sensor createSensor(@RequestBody Sensor sensor) {
-        return sensorService.createSensor(sensor);
+    public void addSensor(@RequestBody Sensor sensor) {
+        sensorService.addNewSensor(sensor); // Usamos la instancia inyectada
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Sensor> getSensorById(@PathVariable Long id) {
-        return sensorService.getSensorById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @PutMapping("/{id}")
-    public Sensor updateSensor(@PathVariable Long id, @RequestBody Sensor sensorDetails) {
-        return sensorService.updateSensor(id, sensorDetails);
-    }
-
+    // Eliminar un sensor por ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSensor(@PathVariable Long id) {
-        sensorService.deleteSensor(id);
-        return ResponseEntity.noContent().build();
+    public void deleteSensor(@PathVariable("id") Long id) {
+        sensorService.deleteSensor(id); // Usamos la instancia inyectada
     }
 }

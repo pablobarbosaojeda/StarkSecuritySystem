@@ -1,43 +1,60 @@
 package com.starkindustries.security_system.service;
 
-
-
+import com.starkindustries.security_system.model.AccessSensor;
+import com.starkindustries.security_system.model.MotionSensor;
 import com.starkindustries.security_system.model.Sensor;
+import com.starkindustries.security_system.model.TempSensor;
 import com.starkindustries.security_system.repository.SensorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class SensorService {
 
-    @Autowired
-    private SensorRepository sensorRepository;
+    private final SensorRepository sensorRepository;
 
-    public List<Sensor> getAllSensors() {
+    @Autowired
+    public SensorService(SensorRepository sensorRepository) {
+        this.sensorRepository = sensorRepository;
+    }
+
+    // Obtener todos los sensores
+    public List<Sensor> getSensors() {
         return sensorRepository.findAll();
     }
 
-    public Sensor createSensor(Sensor sensor) {
-        return sensorRepository.save(sensor);
+    // Obtener sensores de temperatura
+    public List<TempSensor> getTempSensors() {
+        return sensorRepository.findAllTempSensors();
     }
 
-    public Optional<Sensor> getSensorById(Long id) {
-        return sensorRepository.findById(id);
+    // Obtener sensores de movimiento
+    public List<MotionSensor> getMotionSensors() {
+        return sensorRepository.findAllMotionSensors();
     }
 
-    public Sensor updateSensor(Long id, Sensor sensorDetails) {
-        Sensor sensor = sensorRepository.findById(id).orElseThrow();
-        sensor.setName(sensorDetails.getName());
-        sensor.setType(sensorDetails.getType());
-        sensor.setStatus(sensorDetails.getStatus());
-        sensor.setLocation(sensorDetails.getLocation()); // Actualizar ubicación
-        return sensorRepository.save(sensor);
+    // Obtener sensores de acceso
+    public List<AccessSensor> getAccessSensors() {
+        return sensorRepository.findAllAccessSensors();
     }
 
+    // Agregar un nuevo sensor
+    public void addNewSensor(Sensor sensor) {
+        Optional<Sensor> sensorByName = sensorRepository.findSensorByName(sensor.getName());
+        if (sensorByName.isPresent()) {
+            throw new IllegalArgumentException("El sensor ya existe");
+        }
+        sensorRepository.save(sensor);
+    }
+
+    // Eliminar un sensor por ID
     public void deleteSensor(Long id) {
+        boolean exists = sensorRepository.existsById(id);
+        if (!exists) {
+            throw new IllegalStateException("El sensor con id " + id + " no existe.");
+        }
         sensorRepository.deleteById(id);
     }
 }

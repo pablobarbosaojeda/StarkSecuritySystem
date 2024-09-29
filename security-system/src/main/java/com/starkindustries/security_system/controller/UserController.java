@@ -1,54 +1,59 @@
 package com.starkindustries.security_system.controller;
 
 
+
 import com.starkindustries.security_system.model.User;
 import com.starkindustries.security_system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("publico/api/v1/users")
+@CrossOrigin(origins = "http://localhost:8080")
 public class UserController {
 
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    private UserService userService;
+    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     // Obtener todos los usuarios
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+    public List<User> getUsers() {
+        return userService.getUsers(); // Usamos la instancia inyectada
     }
 
-    // Crear un nuevo usuario
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = userService.createUser(user);
-        return ResponseEntity.ok(createdUser);
-    }
-
-    // Obtener usuario por ID
+    // Obtener un usuario por ID
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return userService.getUserById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public Optional<User> getUserById(@PathVariable("id") Long id) {
+        return userService.getUserById(id); // Usamos la instancia inyectada
     }
 
-    // Actualizar usuario
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
-        User updatedUser = userService.updateUser(id, userDetails);
-        return ResponseEntity.ok(updatedUser);
+    // Agregar un nuevo usuario
+    @PostMapping
+    public void addUser(@RequestBody User user) {
+        userService.addNewUser(new User(user.getName(), user.getEmail(), passwordEncoder.encode(user.getPassword()), user.getRole()));
     }
 
-    // Eliminar usuario
+    // Eliminar un usuario por ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
+    public void deleteUser(@PathVariable("id") Long id) {
+        userService.deleteUser(id); // Usamos la instancia inyectada
+    }
+
+    // Actualizar un usuario por ID
+    @PutMapping("/{id}")
+    public void updateUser(
+            @PathVariable("id") Long id,
+            @RequestBody User updatedUser) {
+        userService.updateUser(id, updatedUser); // Usamos la instancia inyectada
     }
 }
